@@ -28,9 +28,9 @@ export async function generatePaymentPDF(details: PaymentDetails): Promise<Buffe
   });
 
   // Set colors and fonts
-  const primaryColor = [37, 99, 235]; // #2563eb
-  const textColor = [0, 0, 0];
-  const lightTextColor = [102, 102, 102];
+  const primaryColor: [number, number, number] = [37, 99, 235]; // #2563eb
+  const textColor: [number, number, number] = [0, 0, 0];
+  const lightTextColor: [number, number, number] = [102, 102, 102];
 
   // Page width for calculations
   const pageWidth = doc.internal.pageSize.getWidth();
