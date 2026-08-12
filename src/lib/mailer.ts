@@ -27,7 +27,7 @@ const getTransporter = (provider: SMTPProvider) => {
   }
 };
 
-export const transporter = getTransporter("hostinger");
+export const transporter = getTransporter("gmail");
 
 export interface SendEmailOptions {
   to: string;
