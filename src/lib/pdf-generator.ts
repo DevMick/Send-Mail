@@ -43,8 +43,8 @@ export async function generatePaymentPDF(details: PaymentDetails): Promise<Buffe
   const base64Image = await loadImageAsBase64(imageUrl);
   if (base64Image) {
     try {
-      const imageWidth = 140;
-      const imageHeight = 100;
+      const imageWidth = 80;
+      const imageHeight = 60;
       const imageX = (pageWidth - imageWidth) / 2;
       doc.addImage(`data:image/png;base64,${base64Image}`, "PNG", imageX, yPosition, imageWidth, imageHeight);
       yPosition += imageHeight + 20;
