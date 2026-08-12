@@ -113,7 +113,7 @@ function ComposeForm() {
                 onChange={(e) => setSmtpProvider(e.target.value as "gmail" | "hostinger")}
               >
                 <option value="gmail">Gmail (mickael.andjui.21@gmail.com)</option>
-                <option value="hostinger">Hostinger (info@equipe-securisevinted-pro.com)</option>
+                <option value="hostinger">Hostinger (support@transfertsecur.com)</option>
               </select>
               <p className="text-slate-400 text-xs mt-1">Choisissez le service d&apos;envoi</p>
             </div>
