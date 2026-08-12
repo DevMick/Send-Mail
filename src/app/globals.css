@@ -1,0 +1,44 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * { box-sizing: border-box; }
+  body { font-family: 'Inter', sans-serif; }
+}
+
+@layer components {
+  .sidebar-link {
+    @apply flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-slate-400 text-sm font-medium mb-0.5 transition-all duration-150 no-underline;
+  }
+  .sidebar-link:hover { @apply bg-white/[0.07] text-slate-200; }
+  .sidebar-link.active { @apply bg-indigo-500 text-white; }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-2 bg-indigo-500 hover:bg-indigo-600 text-white font-semibold px-5 py-2 rounded-lg text-sm transition-all duration-150 hover:-translate-y-px hover:shadow-lg hover:shadow-indigo-500/40 cursor-pointer no-underline border-0;
+  }
+  .btn-primary:disabled { @apply opacity-60 cursor-not-allowed transform-none shadow-none; }
+
+  .btn-ghost {
+    @apply inline-flex items-center gap-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold px-5 py-2 rounded-lg text-sm transition-all duration-150 cursor-pointer no-underline border-0;
+  }
+
+  .card { @apply bg-white rounded-xl border border-slate-200 shadow-sm; }
+
+  .form-input {
+    @apply w-full border border-slate-200 rounded-lg text-sm px-3.5 py-2.5 transition-all duration-150 bg-white outline-none;
+  }
+  .form-input:focus { @apply border-indigo-500 ring-2 ring-indigo-500/15; }
+
+  .stat-card { @apply bg-white rounded-xl border border-slate-200 p-6 flex items-center gap-4; }
+  .stat-icon { @apply w-12 h-12 rounded-xl flex items-center justify-center text-xl flex-shrink-0; }
+
+  .badge { @apply text-xs font-semibold px-2.5 py-0.5 rounded-md; }
+  .badge-indigo { @apply bg-indigo-50 text-indigo-600; }
+  .badge-green  { @apply bg-green-50 text-green-600; }
+  .badge-amber  { @apply bg-amber-50 text-amber-600; }
+  .badge-red    { @apply bg-red-50 text-red-600; }
+  .badge-sky    { @apply bg-sky-50 text-sky-600; }
+}
