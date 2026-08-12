@@ -4,7 +4,7 @@ import { sendEmail } from "@/lib/mailer";
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { to, cc, bcc, subject, html, text, senderName, replyTo } = body;
+    const { to, cc, bcc, subject, html, text, senderName, replyTo, smtpProvider } = body;
 
     if (!to || !subject || !html) {
       return NextResponse.json(
@@ -22,6 +22,7 @@ export async function POST(req: NextRequest) {
       text,
       senderName,
       replyTo,
+      smtpProvider,
       paymentDetails: {
         payerName: body.payerName,
         beneficiaryName: body.beneficiaryName,

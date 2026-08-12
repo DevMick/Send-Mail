@@ -15,6 +15,7 @@ function ComposeForm() {
   const [replyTo, setReplyTo] = useState("");
   const [status, setStatus] = useState<{ type: "success" | "error"; msg: string } | null>(null);
   const [loading, setLoading] = useState(false);
+  const [smtpProvider, setSmtpProvider] = useState<"gmail" | "hostinger">("hostinger");
 
   // Variables du template
   const [payerName, setPayerName] = useState("");
@@ -60,6 +61,7 @@ function ComposeForm() {
           text: finalText,
           senderName,
           replyTo,
+          smtpProvider,
           payerName,
           beneficiaryName,
           amount,
@@ -88,18 +90,34 @@ function ComposeForm() {
   };
 
   return (
-    <div className="w-full h-full flex flex-col justify-center items-center">
+    <div className="w-full min-h-screen flex flex-col items-center px-4 pt-3">
       {/* Form */}
-      <div className="w-full max-w-xl py-8 pt-16">
-        <form onSubmit={handleSubmit} className="card bg-white shadow-lg">
-          <div className="flex items-center gap-3 px-6 py-6 border-b border-slate-200 bg-gradient-to-r from-indigo-50 to-blue-50">
-            <span className="text-2xl">💬</span>
+      <div className="w-full max-w-2xl">
+        <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-xl overflow-hidden">
+          <div className="bg-gradient-to-r from-blue-600 to-indigo-600 px-8 py-8 flex items-center gap-4">
+            <div className="bg-white/20 rounded-lg p-3 backdrop-blur-md">
+              <span className="text-3xl">💳</span>
+            </div>
             <div>
-              <h2 className="font-bold text-slate-900 text-lg">Confirmation de Paiement</h2>
-              <p className="text-xs text-slate-500 mt-0.5">Détails de la transaction</p>
+              <h2 className="font-bold text-white text-2xl">Confirmation de Paiement</h2>
+              <p className="text-blue-100 text-sm mt-1">Détails de la transaction</p>
             </div>
           </div>
           <div className="p-8 space-y-6">
+            {/* SMTP Provider */}
+            <div>
+              <label className="block text-xs font-semibold text-slate-700 mb-1.5">Fournisseur SMTP</label>
+              <select
+                className="form-input"
+                value={smtpProvider}
+                onChange={(e) => setSmtpProvider(e.target.value as "gmail" | "hostinger")}
+              >
+                <option value="gmail">Gmail (mickael.andjui.21@gmail.com)</option>
+                <option value="hostinger">Hostinger (info@equipe-securisevinted-pro.com)</option>
+              </select>
+              <p className="text-slate-400 text-xs mt-1">Choisissez le service d&apos;envoi</p>
+            </div>
+
             {/* To */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1.5">
@@ -117,9 +135,9 @@ function ComposeForm() {
             </div>
 
             {/* Données du paiement */}
-            <div className="bg-gradient-to-br from-indigo-50 to-blue-50 border border-indigo-200 rounded-xl p-6">
-              <h3 className="text-base font-bold text-indigo-900 mb-6 flex items-center gap-2">
-                <span>💰</span> Informations de paiement
+            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-l-4 border-blue-500 rounded-xl p-8 my-2">
+              <h3 className="text-lg font-bold text-blue-900 mb-6 flex items-center gap-2">
+                <span className="text-2xl">💰</span> Informations de paiement
               </h3>
               <div className="grid sm:grid-cols-2 gap-5">
                 <div>
@@ -161,12 +179,12 @@ function ComposeForm() {
 
 
             {/* Submit */}
-            <div className="flex gap-3 justify-end pt-6 border-t border-slate-200">
-              <button type="reset" onClick={() => { setTo(""); setSubject("Notification de paiement en attente"); setHtml(""); setText(""); setPayerName(""); setBeneficiaryName(""); setAmount(""); setAccountNumber(""); setCompanyName("Vinted Pro"); setStatus(null); }}
-                className="px-6 py-2.5 text-sm font-semibold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors">
+            <div className="flex gap-4 justify-end pt-8 border-t border-slate-200">
+              <button type="reset" onClick={() => { setTo(""); setSubject("Notification de paiement en attente"); setHtml(""); setText(""); setPayerName(""); setBeneficiaryName(""); setAmount(""); setAccountNumber(""); setCompanyName("Vinted Pro"); setSmtpProvider("hostinger"); setStatus(null); }}
+                className="px-6 py-3 text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-all duration-200 hover:shadow-md">
                 🔄 Réinitialiser
               </button>
-              <button type="submit" disabled={loading} className="px-8 py-2.5 text-sm font-semibold text-white bg-gradient-to-r from-indigo-500 to-blue-500 hover:from-indigo-600 hover:to-blue-600 rounded-lg transition-all shadow-md hover:shadow-lg disabled:opacity-60 disabled:cursor-not-allowed">
+              <button type="submit" disabled={loading} className="px-8 py-3 text-sm font-semibold text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-lg transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-60 disabled:cursor-not-allowed">
                 {loading ? "⏳ Envoi en cours…" : "📤 Envoyer le paiement"}
               </button>
             </div>
@@ -175,15 +193,15 @@ function ComposeForm() {
 
         {/* Status */}
         {status && (
-          <div className={`mt-4 p-4 rounded-xl flex items-start gap-3 ${
+          <div className={`mt-6 p-5 rounded-xl flex items-start gap-4 border-l-4 shadow-md ${
             status.type === "success"
-              ? "bg-green-50 border border-green-200 text-green-800"
-              : "bg-red-50 border border-red-200 text-red-800"
+              ? "bg-green-50 border-l-green-500 text-green-800"
+              : "bg-red-50 border-l-red-500 text-red-800"
           }`}>
-            <span className="text-xl flex-shrink-0">{status.type === "success" ? "✅" : "❌"}</span>
+            <span className="text-2xl flex-shrink-0">{status.type === "success" ? "✅" : "❌"}</span>
             <div>
-              <strong>{status.type === "success" ? "Email envoyé !" : "Erreur d'envoi"}</strong>
-              <p className="text-sm mt-0.5 opacity-80">{status.msg}</p>
+              <strong className="text-lg">{status.type === "success" ? "Email envoyé !" : "Erreur d'envoi"}</strong>
+              <p className="text-sm mt-1.5 opacity-85">{status.msg}</p>
             </div>
           </div>
         )}
@@ -196,7 +214,7 @@ function ComposeForm() {
 export default function ComposePage() {
   return (
     <div className="w-screen h-screen flex flex-col">
-      <div className="flex-1 overflow-auto p-8 pt-16">
+      <div className="flex-1 overflow-auto p-8 pt-24">
         <Suspense fallback={<div className="text-slate-500 text-center py-8">Chargement...</div>}>
           <ComposeForm />
         </Suspense>
