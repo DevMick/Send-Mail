@@ -21,9 +21,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <p className="text-xs text-blue-100 mt-0.5">Confirmations de paiement SEPA</p>
               </div>
             </div>
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-blue-100 bg-blue-500/30 px-3 py-1 rounded-full">v1.0</span>
-            </div>
           </div>
         </header>
         {children}
