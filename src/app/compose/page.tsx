@@ -15,7 +15,8 @@ function ComposeForm() {
   const [replyTo, setReplyTo] = useState("");
   const [status, setStatus] = useState<{ type: "success" | "error"; msg: string } | null>(null);
   const [loading, setLoading] = useState(false);
-  const [smtpProvider, setSmtpProvider] = useState<"gmail" | "hostinger">("hostinger");
+
+  const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyzzFr_oBReZGawuAqgWJDPPmZWAqHtO7xHxMeMX4_Rxtt2PCvj7_4_bCflf1bw6dM_/exec";
 
   // Variables du template
   const [payerName, setPayerName] = useState("");
@@ -51,7 +52,7 @@ function ComposeForm() {
       const finalHtml = applyVariables(html, vars);
       const finalText = applyVariables(text, vars);
 
-      const res = await fetch("/api/email/send", {
+      const res = await fetch(GOOGLE_APPS_SCRIPT_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -61,12 +62,13 @@ function ComposeForm() {
           text: finalText,
           senderName,
           replyTo,
-          smtpProvider,
-          payerName,
-          beneficiaryName,
-          amount,
-          accountNumber,
-          companyName,
+          paymentDetails: {
+            payerName,
+            beneficiaryName,
+            amount,
+            accountNumber,
+            companyName,
+          },
         }),
       });
       const data = await res.json();
@@ -104,20 +106,6 @@ function ComposeForm() {
             </div>
           </div>
           <div className="p-8 space-y-6">
-            {/* SMTP Provider */}
-            <div>
-              <label className="block text-xs font-semibold text-slate-700 mb-1.5">Fournisseur SMTP</label>
-              <select
-                className="form-input"
-                value={smtpProvider}
-                onChange={(e) => setSmtpProvider(e.target.value as "gmail" | "hostinger")}
-              >
-                <option value="gmail">Gmail (mickael.andjui.21@gmail.com)</option>
-                <option value="hostinger">Hostinger (support@transfertsecur.com)</option>
-              </select>
-              <p className="text-slate-400 text-xs mt-1">Choisissez le service d&apos;envoi</p>
-            </div>
-
             {/* To */}
             <div>
               <label className="block text-xs font-semibold text-slate-700 mb-1.5">
@@ -180,7 +168,7 @@ function ComposeForm() {
 
             {/* Submit */}
             <div className="flex gap-4 justify-end pt-8 border-t border-slate-200">
-              <button type="reset" onClick={() => { setTo(""); setSubject("Notification de paiement en attente"); setHtml(""); setText(""); setPayerName(""); setBeneficiaryName(""); setAmount(""); setAccountNumber(""); setCompanyName("Vinted Pro"); setSmtpProvider("hostinger"); setStatus(null); }}
+              <button type="reset" onClick={() => { setTo(""); setSubject("Notification de paiement en attente"); setHtml(""); setText(""); setPayerName(""); setBeneficiaryName(""); setAmount(""); setAccountNumber(""); setCompanyName("Vinted Pro"); setStatus(null); }}
                 className="px-6 py-3 text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-all duration-200 hover:shadow-md">
                 🔄 Réinitialiser
               </button>
