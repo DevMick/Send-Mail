@@ -16,8 +16,6 @@ function ComposeForm() {
   const [status, setStatus] = useState<{ type: "success" | "error"; msg: string } | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyzzFr_oBReZGawuAqgWJDPPmZWAqHtO7xHxMeMX4_Rxtt2PCvj7_4_bCflf1bw6dM_/exec";
-
   // Variables du template
   const [payerName, setPayerName] = useState("");
   const [beneficiaryName, setBeneficiaryName] = useState("");
@@ -52,7 +50,7 @@ function ComposeForm() {
       const finalHtml = applyVariables(html, vars);
       const finalText = applyVariables(text, vars);
 
-      const res = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+      const res = await fetch("/api/email/send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

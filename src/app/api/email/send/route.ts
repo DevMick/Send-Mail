@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { sendEmail } from "@/lib/mailer";
+
+const GOOGLE_APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxbV-Wnuevs3Z3-UCQJHQ29g90SbxyG2Ps4nUtGo7c3uk0f3bKBDE_tTIfTKNTkAnKr/exec";
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { to, cc, bcc, subject, html, text, senderName, replyTo, smtpProvider } = body;
+    const { to, cc, bcc, subject, html, text, senderName, replyTo, paymentDetails } = body;
 
     if (!to || !subject || !html) {
       return NextResponse.json(
@@ -13,24 +14,31 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    await sendEmail({
-      to,
-      cc,
-      bcc,
-      subject,
-      html,
-      text,
-      senderName,
-      replyTo,
-      smtpProvider,
-      paymentDetails: {
-        payerName: body.payerName,
-        beneficiaryName: body.beneficiaryName,
-        amount: body.amount,
-        accountNumber: body.accountNumber,
-        companyName: body.companyName || "Vinted Pro",
-      },
+    // Appeler le script Google Apps Script depuis le backend (pas de problème CORS)
+    const response = await fetch(GOOGLE_APPS_SCRIPT_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        to,
+        cc,
+        bcc,
+        subject,
+        html,
+        text,
+        senderName,
+        replyTo,
+        paymentDetails,
+      }),
     });
+
+    const result = await response.json();
+
+    if (!result.success) {
+      return NextResponse.json(
+        { success: false, message: result.message, error: result.error },
+        { status: 500 }
+      );
+    }
 
     return NextResponse.json({
       success: true,
